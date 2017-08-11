@@ -32,203 +32,215 @@ class API
 		return $result;
 	}
 
+	public function __call($name, $arguments)
+	{
+		$name = strtoupper($name);
+		if (in_array($name, ['GET', 'POST', 'PATCH', 'DELETE'])) {
+			$uri = $arguments[0];
+			$query = $arguments[1] ?? [];
+			$form = $arguments[2] ?? [];
+			return $this->request($name, $uri, $query, $form);
+		}
+	}
+
 	// AREAS
 
 	public function areas($query = [])
 	{
-		return $this->request('GET', 'areas', $query);
+		// return $this->get('areas', $query);
+		return $this->get('areas', $query);
 	}
 
 	// BIKES
 
 	public function bikes($query = [])
 	{
-		return $this->request('GET', 'bikes', $query);
+		return $this->get('bikes', $query);
 	}
 
 	public function bike($bike_id)
 	{
-		return $this->request('GET', "bikes/{$bike_id}");
+		return $this->get("bikes/{$bike_id}");
 	}
 
 	public function bookBike($bike_id, $ble_uuid = '')
 	{
-		return $this->request('POST', "bikes/{$bike_id}/book_bike", [], compact('ble_uuid'));
+		return $this->post("bikes/{$bike_id}/book_bike", [], compact('ble_uuid'));
 	}
 
 	public function reportIssue($bike_id, $problems)
 	{
-		return $this->request('POST', "bikes/{$bike_id}/report_issue", [], compact('problems'));
+		return $this->post("bikes/{$bike_id}/report_issue", [], compact('problems'));
 	}
 
 	// FRIENDS
 
 	public function friends($page = 1, $per_page = null)
 	{
-		return $this->request('GET', 'friends', compact('page', 'per_page'));
+		return $this->get('friends', compact('page', 'per_page'));
 	}
 
 	// HUBS
 
 	public function hubs($query = [])
 	{
-		return $this->request('GET', 'hubs', $query);
+		return $this->get('hubs', $query);
 	}
 
 	public function bookBikeFromHub($hub_id, $ble_uuid = '')
 	{
-		return $this->request('POST', "hubs/{$hub_id}/book_bike", [], compact('ble_uuid'));
+		return $this->post("hubs/{$hub_id}/book_bike", [], compact('ble_uuid'));
 	}
 
 	public function hub($hub_id, $query = [])
 	{
-		return $this->request('GET', "hubs/{$hub_id}", $query);
+		return $this->get("hubs/{$hub_id}", $query);
 	}
 
 	// NETWORKS
 
 	public function networks($subscribed = false)
 	{
-		return $this->request('GET', "networks", compact('subscribed'));
+		return $this->get("networks", compact('subscribed'));
 	}
 
 	public function networkAreas($network_id, $query = [])
 	{
-		return $this->request('GET', "networks/{$network_id}/areas", $query);
+		return $this->get("networks/{$network_id}/areas", $query);
 	}
 
 	public function networkSpecialAreas($network_id, $query = [])
 	{
-		return $this->request('GET', "networks/{$network_id}/special_areas", $query);
+		return $this->get("networks/{$network_id}/special_areas", $query);
 	}
 
 	public function networkHubs($network_id, $query = [])
 	{
-		return $this->request('GET', "networks/{$network_id}/hubs", $query);
+		return $this->get("networks/{$network_id}/hubs", $query);
 	}
 
 	public function networkBikes($network_id, $query = [])
 	{
-		return $this->request('GET', "networks/{$network_id}/bikes", $query);
+		return $this->get("networks/{$network_id}/bikes", $query);
 	}
 
 	public function networkUnsubscribe($network_id)
 	{
-		return $this->request('DELETE', "networks/{$network_id}/subscription");
+		return $this->delete("networks/{$network_id}/subscription");
 	}
 
 	public function networkSubscription($network_id)
 	{
-		return $this->request('GET', "networks/{$network_id}/subscription");
+		return $this->get("networks/{$network_id}/subscription");
 	}
 
 	public function networkSystemHours($network_id)
 	{
-		return $this->request('GET', "networks/{$network_id}/system_hours");
+		return $this->get("networks/{$network_id}/system_hours");
 	}
 
 	public function network($network_id)
 	{
-		return $this->request('GET', "networks/{$network_id}");
+		return $this->get("networks/{$network_id}");
 	}
 
 	// RENTALS
 
 	public function rentals($query = [])
 	{
-		return $this->request('GET', 'rentals', $query);
+		return $this->get('rentals', $query);
 	}
 
 	public function rentalCancel()
 	{
-		return $this->request('DELETE', 'rentals/cancel');
+		return $this->delete('rentals/cancel');
 	}
 
 	public function rental($rental_id)
 	{
-		return $this->request('GET', "rentals/{$rental_id}");
+		return $this->get("rentals/{$rental_id}");
 	}
 
 	// RFIDS
 
 	public function rfids($query = [])
 	{
-		return $this->request('GET', 'rfids', $query);
+		return $this->get('rfids', $query);
 	}
 
 	public function rfidCreate($uid, $name)
 	{
-		return $this->request('POST', 'rfids', [], compact('uid', 'name'));
+		return $this->post('rfids', [], compact('uid', 'name'));
 	}
 
 	public function rfidUpdate($rfid_id, $name)
 	{
-		return $this->request('PATCH', "rfids/{$rfid_id}", compact('$name'));
+		return $this->patch("rfids/{$rfid_id}", compact('$name'));
 	}
 
 	public function rfidDelete($rfid_id)
 	{
-		return $this->request('DELETE', "rfids/{$rfid_id}");
+		return $this->delete("rfids/{$rfid_id}");
 	}
 
 	// ROUTES
 
 	public function routes($query = [])
 	{
-		return $this->request('GET', 'routes', $query);
+		return $this->get('routes', $query);
 	}
 
 	public function route($route_id)
 	{
-		return $this->request('GET', "routes/{$route_id}");
+		return $this->get("routes/{$route_id}");
 	}
 
 	public function routeUpdate($route_id, $query = [])
 	{
-		return $this->request('PATCH', "routes/{$route_id}", $query);
+		return $this->patch("routes/{$route_id}", $query);
 	}
 
 	// RTM
 
 	public function rtm()
 	{
-		return $this->request('GET', 'rtm/token');
+		return $this->get('rtm/token');
 	}
 
 	// SEARCH
 
 	public function search($query, $all_networks = false)
 	{
-		return $this->request('GET', 'search', compact('query', 'all_networks'));
+		return $this->get('search', compact('query', 'all_networks'));
 	}
 
 	// SUBSCRIPTIONS
 
 	public function subscriptions()
 	{
-		return $this->request('GET', 'subscriptions');
+		return $this->get('subscriptions');
 	}
 
 	// USERS
 
 	public function userUpdateInfo($query = [])
 	{
-		return $this->request('PATCH', 'users/update_info', $query);
+		return $this->patch('users/update_info', $query);
 	}
 
 	public function userUpdateEmail($email, $password)
 	{
-		return $this->request('PATCH', 'users/update_email', compact('email', 'users/password'));
+		return $this->patch('users/update_email', compact('email', 'users/password'));
 	}
 
 	public function userUpdatePassword($password, $old_assword)	
 	{
-		return $this->request('PATCH', 'users/update_password', compact('password', 'old_password'));
+		return $this->patch('users/update_password', compact('password', 'old_password'));
 	}
 
 	public function me($query = [])
 	{
-		return $this->request('GET', 'users/me', $query);
+		return $this->get('users/me', $query);
 	}
 
 	// GPX
@@ -241,7 +253,7 @@ class API
 				'Authorization' => 'Basic ' . $this->hash
 			]
 		]);
-		$gpx = $this->request('GET', "https://app.socialbicycles.com/users/{$user_id}/routes/{$route_id}/download_gpx");
+		$gpx = $this->get("https://app.socialbicycles.com/users/{$user_id}/routes/{$route_id}/download_gpx");
 		return $gpx;
 	}
 
