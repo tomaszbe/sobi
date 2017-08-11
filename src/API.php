@@ -230,7 +230,7 @@ class API
 
 	public function userUpdateEmail($email, $password)
 	{
-		return $this->patch('users/update_email', compact('email', 'users/password'));
+		return $this->patch('users/update_email', compact('email', 'password'));
 	}
 
 	public function userUpdatePassword($password, $old_assword)	
