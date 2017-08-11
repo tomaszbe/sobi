@@ -28,7 +28,8 @@ class API
 			'query' => $query,
 			'form_params' => $form
 		]);
-		return json_decode($response->getBody()->getContents());
+		$result = json_decode($response->getBody()->getContents());
+		return $result;
 	}
 
 	// AREAS

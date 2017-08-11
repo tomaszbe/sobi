@@ -7,21 +7,21 @@ namespace Sobi;
 */
 class Point
 {
-	protected $x, $y;
+	protected $lon, $lat;
 
 	function __construct($raw)
 	{
-		$this->x = $raw->coordinates[0];
-		$this->y = $raw->coordinates[1];
+		$this->lon = $raw->coordinates[0];
+		$this->lat = $raw->coordinates[1];
 	}
 
-	public function getX()
+	public function getLon()
 	{
-		return $this->x;
+		return $this->lon;
 	}
 
-	public function getY()
+	public function getLat()
 	{
-		return $this->y;
+		return $this->lat;
 	}
 }

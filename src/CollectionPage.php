@@ -12,18 +12,38 @@ class CollectionPage
 	protected $total_entries;
 	public $items = [];
 
-	protected $itemClass;
+	protected $class;
 
-	function __construct($itemClass, $raw)
+	public function createFromObject($class, $object)
 	{
-		foreach (get_object_vars($raw) as $key => $value) {
+		foreach (get_object_vars($object) as $key => $value) {
 			if ($key == 'items') {
-				foreach ($raw->items as $item) {
-					$this->items[] =  new $itemClass($item);
+				foreach ($object->items as $item) {
+					$this->items[] =  new $class($item);
 				}
 			} else {
 				$this->{$key} = $value;
 			}
+		}
+	}
+
+	public function createFromArray($class, $array)
+	{
+		$object = new \stdClass;
+		$object->current_page = 1;
+		$count = count($array);
+		$object->per_page = $count;
+		$object->total_entries = $count;
+		$object->items = $array;
+		$this->createFromObject($class, $object);
+	}
+
+	function __construct($class, $objectOrArray)
+	{
+		if ($objectOrArray instanceOf \stdClass) {
+			$this->createFromObject($class, $objectOrArray);
+		} else if (is_array($objectOrArray)) {
+			$this->createFromArray($class, $objectOrArray);
 		}
 	}
 
