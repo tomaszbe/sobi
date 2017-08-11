@@ -27,6 +27,9 @@ class CollectionPageTest extends TestCase
 		$hubs = $api->hubs(['per_page' => 2]);
 		$hubsPage = new CollectionPage(Hub::class, $hubs);
 
-		d($areas);
+		$networkAreas = $api->networkAreas(105);
+		$networkAreasPage = new CollectionPage(Area::class, $networkAreas);
+
+		$this->assertContains('Wavelo', $networkAreasPage->items[0]->name);
 	}
 }
