@@ -1,5 +1,14 @@
 {
+    "name": "tomaszbe/sobi",
+    "description": "PHP Wrapper around SocialBicycles API",
     "require": {
         "nesbot/carbon": "^1.22"
-    }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomasz Baranski",
+            "email": "tomaszbe@hotmail.com"
+        }
+    ]
 }
