@@ -1,9 +1,9 @@
 <?php
 
-namespace Tomaszbe\Tests;
+namespace Sobi\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Tomaszbe\API;
+use Sobi\API;
 use Carbon\Carbon;
 
 /**
@@ -158,7 +158,16 @@ class APITest extends TestCase
 	public function test_me()
 	{
 		$me = $this->api()->me(['latitude' => 20, 'longitude' => 50]);
-		d($me);
+		$this->assertGreaterThan(1, $me->id);
+	}
+
+	public function xtest_gpx()
+	{
+		$me = $this->api()->me();
+		$routes = $this->api()->routes();
+		$routeId = $routes->items[0]->id;
+		$gpx = $this->api()->gpx($me->id, $routeId);
+		d($gpx);
 	}
 
 }

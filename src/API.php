@@ -1,6 +1,6 @@
 <?php
 
-namespace Tomaszbe;
+namespace Sobi;
 
 use GuzzleHttp\Client;
 
@@ -69,7 +69,7 @@ class API
 
 	// HUBS
 
-	public function hubs($query)
+	public function hubs($query = [])
 	{
 		return $this->request('GET', 'hubs', $query);
 	}
@@ -79,9 +79,9 @@ class API
 		return $this->request('POST', "hubs/{$hub_id}/book_bike", [], compact('ble_uuid'));
 	}
 
-	public function hub($hub_id, $exclude_attributes = [])
+	public function hub($hub_id, $query = [])
 	{
-		return $this->request('GET', "hubs/{$hub_id}", compact('exclude_attributes'));
+		return $this->request('GET', "hubs/{$hub_id}", $query);
 	}
 
 	// NETWORKS
@@ -133,7 +133,7 @@ class API
 
 	// RENTALS
 
-	public function rentals($query)
+	public function rentals($query = [])
 	{
 		return $this->request('GET', 'rentals', $query);
 	}
@@ -150,7 +150,7 @@ class API
 
 	// RFIDS
 
-	public function rfids($query)
+	public function rfids($query = [])
 	{
 		return $this->request('GET', 'rfids', $query);
 	}
@@ -172,7 +172,7 @@ class API
 
 	// ROUTES
 
-	public function routes($query)
+	public function routes($query = [])
 	{
 		return $this->request('GET', 'routes', $query);
 	}
@@ -210,7 +210,7 @@ class API
 
 	// USERS
 
-	public function userUpdateInfo($query)
+	public function userUpdateInfo($query = [])
 	{
 		return $this->request('PATCH', 'users/update_info', $query);
 	}
@@ -228,6 +228,20 @@ class API
 	public function me($query = [])
 	{
 		return $this->request('GET', 'users/me', $query);
+	}
+
+	// GPX
+
+	public function gpx($user_id, $route_id)
+	{
+		$this->client->get("https://app.socialbicycles.com/users/{$user_id}/routes/{$route_id}/download_gpx", [
+			'sink' => 'storage/file.gpx',
+			'headers' => [
+				'Authorization' => 'Basic ' . $this->hash
+			]
+		]);
+		$gpx = $this->request('GET', "https://app.socialbicycles.com/users/{$user_id}/routes/{$route_id}/download_gpx");
+		return $gpx;
 	}
 
 }

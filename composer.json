@@ -10,10 +10,10 @@
         "mockery/mockery": "^0.9.9"
     },
     "autoload": {
-        "psr-4": {"Tomaszbe\\": "src/"}
+        "psr-4": {"Sobi\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": {"Tomaszbe\\Tests\\": "tests/"}
+        "psr-4": {"Sobi\\Tests\\": "tests/"}
     },
     "license": "MIT",
     "authors": [
