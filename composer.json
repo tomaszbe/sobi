@@ -5,8 +5,15 @@
         "nesbot/carbon": "^1.22",
         "guzzlehttp/guzzle": "^6.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^6.3",
+        "mockery/mockery": "^0.9.9"
+    },
     "autoload": {
         "psr-4": {"Tomaszbe\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"Tomaszbe\\Tests\\": "tests/"}
     },
     "license": "MIT",
     "authors": [
@@ -14,8 +21,5 @@
             "name": "Tomasz Baranski",
             "email": "tomaszbe@hotmail.com"
         }
-    ],
-    "require-dev": {
-        "phpunit/phpunit": "^6.3"
-    }
+    ]
 }
