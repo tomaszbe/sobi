@@ -36,10 +36,7 @@ class API
 	{
 		$name = strtoupper($name);
 		if (in_array($name, ['GET', 'POST', 'PATCH', 'DELETE'])) {
-			$uri = $arguments[0];
-			$query = $arguments[1] ?? [];
-			$form = $arguments[2] ?? [];
-			return $this->request($name, $uri, $query, $form);
+			return $this->request($name, ...$arguments);
 		}
 	}
 
