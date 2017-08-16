@@ -40,29 +40,37 @@ class API
 		}
 	}
 
+	public function model($type = \stdClass::class, ...$arguments)
+	{
+		return new $type(...$arguments);
+	}
+
 	// AREAS
 
 	public function areas($query = [])
 	{
 		// return $this->get('areas', $query);
-		return $this->get('areas', $query);
+		// return $this->get('areas', $query);
+		$areas = $this->get('areas', $query);
+		return $this->model(CollectionPage::class, Area::class, $areas);
 	}
 
 	// BIKES
 
 	public function bikes($query = [])
 	{
-		return $this->get('bikes', $query);
+		$bikes = $this->get('bikes', $query);
+		return $this->model(CollectionPage::class, Bike::class, $bikes);
 	}
 
 	public function bike($bike_id)
 	{
-		return $this->get("bikes/{$bike_id}");
+		return $this->model(Bike::class, $this->get("bikes/{$bike_id}"));
 	}
 
 	public function bookBike($bike_id, $ble_uuid = '')
 	{
-		return $this->post("bikes/{$bike_id}/book_bike", [], compact('ble_uuid'));
+		return $this->model(Bike::class, $this->post("bikes/{$bike_id}/book_bike", [], compact('ble_uuid')));
 	}
 
 	public function reportIssue($bike_id, $problems)
@@ -74,51 +82,55 @@ class API
 
 	public function friends($page = 1, $per_page = null)
 	{
-		return $this->get('friends', compact('page', 'per_page'));
+		return $this->model(CollectionPage::class, Friend::class, $this->get('friends', compact('page', 'per_page')));
 	}
 
 	// HUBS
 
 	public function hubs($query = [])
 	{
+		if (isset($query['network_id']))
+		{
+			return $this->networkHubs($query['network_id'], $query);
+		}
 		return $this->get('hubs', $query);
 	}
 
 	public function bookBikeFromHub($hub_id, $ble_uuid = '')
 	{
-		return $this->post("hubs/{$hub_id}/book_bike", [], compact('ble_uuid'));
+		return $this->model(Bike::class, $this->post("hubs/{$hub_id}/book_bike", [], compact('ble_uuid')));
 	}
 
 	public function hub($hub_id, $query = [])
 	{
-		return $this->get("hubs/{$hub_id}", $query);
+		return $this->model(Hub::class, $this->get("hubs/{$hub_id}", $query));
 	}
 
 	// NETWORKS
 
 	public function networks($subscribed = false)
 	{
-		return $this->get("networks", compact('subscribed'));
+		return $this->model(CollectionPage::class, Network::class, $this->get("networks", compact('subscribed')));
 	}
 
 	public function networkAreas($network_id, $query = [])
 	{
-		return $this->get("networks/{$network_id}/areas", $query);
+		return $this->model(CollectionPage::class, Area::class, $this->get("networks/{$network_id}/areas", $query));
 	}
 
 	public function networkSpecialAreas($network_id, $query = [])
 	{
-		return $this->get("networks/{$network_id}/special_areas", $query);
+		return $this->model(CollectionPage::class, Area::class, $this->get("networks/{$network_id}/special_areas", $query));
 	}
 
 	public function networkHubs($network_id, $query = [])
 	{
-		return $this->get("networks/{$network_id}/hubs", $query);
+		return $this->model(CollectionPage::class, Hub::class, $this->get("networks/{$network_id}/hubs", $query));
 	}
 
 	public function networkBikes($network_id, $query = [])
 	{
-		return $this->get("networks/{$network_id}/bikes", $query);
+		return $this->model(CollectionPage::class, Bike::class, $this->get("networks/{$network_id}/bikes", $query));
 	}
 
 	public function networkUnsubscribe($network_id)
@@ -128,7 +140,7 @@ class API
 
 	public function networkSubscription($network_id)
 	{
-		return $this->get("networks/{$network_id}/subscription");
+		return $this->model(Subscription::class, $this->get("networks/{$network_id}/subscription"));
 	}
 
 	public function networkSystemHours($network_id)
@@ -138,14 +150,14 @@ class API
 
 	public function network($network_id)
 	{
-		return $this->get("networks/{$network_id}");
+		return $this->model(Network::class, $this->get("networks/{$network_id}"));
 	}
 
 	// RENTALS
 
 	public function rentals($query = [])
 	{
-		return $this->get('rentals', $query);
+		return $this->model(CollectionPage::class, Rental::class, $this->get('rentals', $query));
 	}
 
 	public function rentalCancel()
@@ -155,24 +167,24 @@ class API
 
 	public function rental($rental_id)
 	{
-		return $this->get("rentals/{$rental_id}");
+		return $this->model(Rental::class, $this->get("rentals/{$rental_id}"));
 	}
 
 	// RFIDS
 
 	public function rfids($query = [])
 	{
-		return $this->get('rfids', $query);
+		return $this->model(CollectionPage::class, RFID::class, $this->get('rfids', $query));
 	}
 
 	public function rfidCreate($uid, $name)
 	{
-		return $this->post('rfids', [], compact('uid', 'name'));
+		return $this->model(RFID::class, $this->post('rfids', [], compact('uid', 'name')));
 	}
 
 	public function rfidUpdate($rfid_id, $name)
 	{
-		return $this->patch("rfids/{$rfid_id}", compact('$name'));
+		return $this->model(RFID::class, $this->patch("rfids/{$rfid_id}", compact('$name')));
 	}
 
 	public function rfidDelete($rfid_id)
@@ -184,24 +196,24 @@ class API
 
 	public function routes($query = [])
 	{
-		return $this->get('routes', $query);
+		return $this->model(CollectionPage::class, Route::class, $this->get('routes', $query));
 	}
 
 	public function route($route_id)
 	{
-		return $this->get("routes/{$route_id}");
+		return $this->model(Route::class, $this->get("routes/{$route_id}"));
 	}
 
 	public function routeUpdate($route_id, $query = [])
 	{
-		return $this->patch("routes/{$route_id}", $query);
+		return $this->model(Route::class, $this->patch("routes/{$route_id}", $query));
 	}
 
 	// RTM
 
 	public function rtm()
 	{
-		return $this->get('rtm/token');
+		return $this->model(RTM::class, $this->get('rtm/token'));
 	}
 
 	// SEARCH
@@ -215,29 +227,29 @@ class API
 
 	public function subscriptions()
 	{
-		return $this->get('subscriptions');
+		return $this->model(CollectionPage::class, Subscription::class, $this->get('subscriptions'));
 	}
 
 	// USERS
 
 	public function userUpdateInfo($query = [])
 	{
-		return $this->patch('users/update_info', $query);
+		return $this->model(User::class, $this->patch('users/update_info', $query));
 	}
 
 	public function userUpdateEmail($email, $password)
 	{
-		return $this->patch('users/update_email', compact('email', 'password'));
+		return $this->model(User::class, $this->patch('users/update_email', compact('email', 'password')));
 	}
 
 	public function userUpdatePassword($password, $old_assword)	
 	{
-		return $this->patch('users/update_password', compact('password', 'old_password'));
+		return $this->model(User::class, $this->patch('users/update_password', compact('password', 'old_password')));
 	}
 
 	public function me($query = [])
 	{
-		return $this->get('users/me', $query);
+		return $this->model(User::class, $this->get('users/me', $query));
 	}
 
 	// GPX

@@ -73,7 +73,7 @@ class APITest extends TestCase
 		$areas = $this->api()->networkAreas($network->id, ['exclude_attributes' => 'polygon']);
 		$this->assertEquals($areas[0]->network_id, $network->id);
 		$specialAreas = $this->api()->networkSpecialAreas($network->id, ['exclude_attributes' => 'polygon']);
-		$this->assertTrue(is_array($specialAreas));
+		$this->assertTrue(-1 < count($specialAreas));
 		$hubs = $this->api()->networkHubs($network->id, ['per_page' => '1']);
 		$this->assertEquals($hubs->items[0]->network_id, $network->id);
 		$bikes = $this->api()->networkBikes($network->id, ['per_page' => '1']);
@@ -81,7 +81,7 @@ class APITest extends TestCase
 		$subscription = $this->api()->networkSubscription($network->id);
 		$this->assertEquals($network->id, $subscription->network_id);
 		$systemHours = $this->api()->networkSystemHours($network->id);
-		$this->assertTrue(is_array($systemHours));
+		$this->assertTrue(-1 < count($systemHours));
 		$networkFromId = $this->api()->network($network->id);
 		$this->assertEquals($networkFromId->id, $network->id);
 	}
@@ -152,7 +152,7 @@ class APITest extends TestCase
 	public function test_subscriptions()
 	{
 		$subscriptions = $this->api()->subscriptions();
-		$this->assertTrue(is_array($subscriptions));
+		$this->assertTrue(-1 < count($subscriptions));
 	}
 
 	public function test_me()

@@ -5,7 +5,7 @@ namespace Sobi;
 /**
 * Base Model Class
 */
-class BaseModel
+class BaseModel extends \stdClass
 {
 	function __construct($raw)
 	{

@@ -5,11 +5,11 @@ namespace Sobi;
 /**
 * Collection Page Class
 */
-class CollectionPage
+class CollectionPage extends \stdClass implements \Countable, \ArrayAccess 
 {
-	protected $current_page;
-	protected $per_page;
-	protected $total_entries;
+	public $current_page;
+	public $per_page;
+	public $total_entries;
 	public $items = [];
 
 	protected $class;
@@ -38,7 +38,7 @@ class CollectionPage
 		$this->createFromObject($class, $object);
 	}
 
-	function __construct($class, $objectOrArray)
+	function __construct($class, $objectOrArray = [])
 	{
 		if ($objectOrArray instanceOf \stdClass) {
 			$this->createFromObject($class, $objectOrArray);
@@ -50,5 +50,30 @@ class CollectionPage
 	public function getTotalEntries()
 	{
 		return $this->total_entries;
+	}
+
+	public function count()
+	{
+		return count($this->items);
+	}
+
+	public function offsetExists ( $offset )
+	{
+		return $offset < count($this);
+	}
+
+	public function offsetGet ( $offset )
+	{
+		return $this->items[$offset];
+	}
+
+	public function offsetSet ($offset, $value )
+	{
+		return false;
+	}
+
+	public function offsetUnset ($offset)
+	{
+		return false;
 	}
 }
